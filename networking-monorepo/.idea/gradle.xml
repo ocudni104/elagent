@@ -9,8 +9,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/nm-api-gateway" />
             <option value="$PROJECT_DIR$/nm-code-indexing" />
+            <option value="$PROJECT_DIR$/nm-gitops" />
             <option value="$PROJECT_DIR$/nm-idp-service" />
+            <option value="$PROJECT_DIR$/nm-llm-broker" />
             <option value="$PROJECT_DIR$/nm-workspace-manager" />
           </set>
         </option>

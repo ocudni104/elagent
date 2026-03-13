@@ -41,3 +41,18 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+################################
+# Node / pnpm (ANYWHERE)
+################################
+**/node_modules/
+**/.pnpm/
+**/.pnpm-store/
+**/pnpm-debug.log*
+**/.turbo/
+**/.cache/
+**/.vite/
+**/.astro/
+**/dist/
+**/build/
+**/out/

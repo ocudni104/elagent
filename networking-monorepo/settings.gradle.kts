@@ -1,6 +1,6 @@
 rootProject.name = "networking-monorepo"
 // include("wm-lab-spring" ...)
-include("nm-idp-service", "nm-workspace-manager")
+
 
 pluginManagement {
     repositories {
@@ -50,3 +50,8 @@ dependencyResolutionManagement {
 }
 
 include("nm-code-indexing")
+include("nm-gitops")
+include("nm-workspace-manager")
+include("nm-idp-service")
+include("nm-llm-broker")
+include("nm-api-gateway")

@@ -1,0 +1,14 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    ports:
+      - "6333:6333" # Puerto para la API HTTP (el que usarás normalmente)
+      - "6334:6334" # Puerto para gRPC (para conexiones de alta velocidad)
+    volumes:
+      - qdrant-data:/qdrant/storage
+    restart: always
+    environment:
+      - TZ=Europe/Madrid
+volumes:
+  qdrant-data:

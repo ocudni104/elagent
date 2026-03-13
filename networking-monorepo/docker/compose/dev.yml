@@ -1,5 +1,8 @@
 include:
   - infra.kafka.yml
+  - infra.postgres.yml
+  - infra.qdrant.yml
+  - infra.mongodb.yml
 
 services:
   # anchor, x- means extension field so this service gets ignored by execution
@@ -18,7 +21,7 @@ services:
     # <<: *java-service means inherit all properties from anchor
     <<: *java-service
     profiles: [ "idp" ]
-    working_dir: /workspace/npm-idp-service
+    working_dir: /workspace/nm-idp-service
     ports:
       - "8081:8080"
 
@@ -31,10 +34,31 @@ services:
 
   code-indexing:
     <<: *java-service
-    profiles: [ "idp" ]
-    working_dir: /workspace/npm-idp-service
+    profiles: [ "code-indexing" ]
+    working_dir: /workspace/nm-code-indexing
     ports:
       - "8083:8080"
+
+  gitops:
+    <<: *java-service
+    profiles: [ "gitops" ]
+    working_dir: /workspace/nm-gitops
+    ports:
+      - "8084:8080"
+
+  llm-broker:
+    <<: *java-service
+    profiles: [ "llm-broker" ]
+    working_dir: /workspace/nm-llm-broker
+    ports:
+      - "8085:8080"
+
+  api-gateway:
+    <<: *java-service
+    profiles: [ "api-gateway" ]
+    working_dir: /workspace/nm-api-gateway
+    ports:
+      - "8085:8080"
 
 volumes:
   gradle-cache:

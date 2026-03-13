@@ -5,60 +5,93 @@ include:
   - infra.mongodb.yml
 
 services:
+  frontend:
+    container_name: nm-frontend
+    env_file:
+      - .env
+    build:
+      context: ../..
+      dockerfile: docker/dev/frontend.dev.Dockerfile
+      args:
+        UID: ${HOST_UID:-1000}
+        GID: ${HOST_GID:-1000}
+
+    working_dir: /apps/frontend
+
+    volumes:
+      - ./apps/frontend:/apps/frontend
+     # - pnpm-store:/home/app/.pnpm
+
+    command: sh -c "pnpm install && pnpm dev --host"
+
+    ports:
+      - "4321:4321"
+
+    environment:
+      NODE_ENV: development
+      CI: "true"
+
+
   # anchor, x- means extension field so this service gets ignored by execution
   x-java-service: &java-service
     build:
       context: ../..
-      dockerfile: ../dev/java-service.Dockerfile
+      dockerfile: docker/dev/java-service.dev.Dockerfile
 
     volumes:
-      - .:/workspace
+      - ../..:/workspace
       - gradle-cache:/root/.gradle
 
     command: ./gradlew bootRun --continuous
 
   idp-service:
+    container_name: idp-service
     # <<: *java-service means inherit all properties from anchor
     <<: *java-service
-    profiles: [ "idp" ]
+    profiles: [ "idp", "dev" ]
     working_dir: /workspace/nm-idp-service
     ports:
       - "8081:8080"
 
   workspace-manager:
+    container_name: worskpace-manager
     <<: *java-service
-    profiles: [ "workspace" ]
+    profiles: [ "workspace", "dev" ]
     working_dir: /workspace/nm-workspace-manager
     ports:
       - "8082:8080"
 
   code-indexing:
+    container_name: code-indexing
     <<: *java-service
-    profiles: [ "code-indexing" ]
+    profiles: [ "code-indexing", "dev" ]
     working_dir: /workspace/nm-code-indexing
     ports:
       - "8083:8080"
 
   gitops:
+    container_name: gitops
     <<: *java-service
-    profiles: [ "gitops" ]
+    profiles: [ "gitops", "dev" ]
     working_dir: /workspace/nm-gitops
     ports:
       - "8084:8080"
 
   llm-broker:
+    container_name: llm-broker
     <<: *java-service
-    profiles: [ "llm-broker" ]
+    profiles: [ "llm-broker", "dev" ]
     working_dir: /workspace/nm-llm-broker
     ports:
       - "8085:8080"
 
   api-gateway:
+    container_name: api-gateway
     <<: *java-service
-    profiles: [ "api-gateway" ]
+    profiles: [ "api-gateway", "dev" ]
     working_dir: /workspace/nm-api-gateway
     ports:
-      - "8085:8080"
+      - "8086:8080"
 
 volumes:
   gradle-cache:

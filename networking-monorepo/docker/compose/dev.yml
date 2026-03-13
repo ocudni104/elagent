@@ -1,9 +1,12 @@
+include:
+  - infra.kafka.yml
+
 services:
   # anchor, x- means extension field so this service gets ignored by execution
   x-java-service: &java-service
     build:
-      context: .
-      dockerfile: docker/dev/java-service.Dockerfile
+      context: ../..
+      dockerfile: ../dev/java-service.Dockerfile
 
     volumes:
       - .:/workspace

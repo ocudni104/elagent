@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("org.springframework.boot") version libs.versions.springboot apply false
+    alias(libs.plugins.spring.boot) version libs.versions.springboot apply false
 
 }
 

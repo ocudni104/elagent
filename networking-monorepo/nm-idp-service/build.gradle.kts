@@ -8,7 +8,9 @@ dependencies {
     implementation(platform(libs.spring.boot.bom))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.actuator)
-    implementation(libs.spring.boot.starter.test)
+    implementation(libs.spring.boot.starter.security)
+    implementation(libs.spring.authorization.server)
+    implementation(libs.spring.boot.starter.oauth2.client)
     developmentOnly(libs.spring.boot.devtools)
 
 

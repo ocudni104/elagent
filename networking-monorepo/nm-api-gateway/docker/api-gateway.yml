@@ -1,0 +1,18 @@
+services:
+  auth-service:
+    build: ./auth-service
+    volumes:
+      # MAPEAMOS LAS CLASES SUELTAS (Lo que cambia al dar Ctrl+S)
+      - ./build/classes/java/main:/app/classes
+      # MAPEAMOS LOS RECURSOS (application.yml, etc.)
+      - ./build/resources/main:/app/resources
+      # MAPEAMOS LAS LIBRERÍAS EXTERNAS
+      - ./build/output/libs:/app/libs
+    ports:
+      - "8081:8081"
+      - "5005:5005"
+    environment:
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    # EL COMANDO CLAVE: Arranca desde clases, NO desde un jar
+    command: >
+      java -cp /app/resources:/app/classes:/app/libs/* com.example.Main

@@ -10,6 +10,7 @@ dependencies {
     implementation(libs.spring.boot.starter.actuator)
     testImplementation(libs.spring.boot.starter.test)
 
+    developmentOnly(libs.spring.boot.devtools)
 
     // import JUnit BOM
     testImplementation(platform(libs.junit.bom))

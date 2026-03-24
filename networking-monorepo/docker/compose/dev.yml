@@ -36,66 +36,72 @@ services:
   # anchor, x- means extension field so this service gets ignored by execution
   x-java-service: &java-service
     build:
-      context: ../..
-      dockerfile: docker/dev/java-service.dev.Dockerfile
+      #context: ../..
+      dockerfile: ../dev/java-service.dev.Dockerfile
+  #  environment:
+   #   - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
 
     volumes:
       - ../..:/workspace
       - gradle-cache:/root/.gradle
-
-    command: ./gradlew bootRun --continuous
 
   idp-service:
     container_name: idp-service
     # <<: *java-service means inherit all properties from anchor
     <<: *java-service
     profiles: [ "idp", "dev" ]
-    working_dir: /workspace/nm-idp-service
     ports:
       - "8081:8080"
+      - "5001:5005"
     environment:
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+    command: ./gradlew nm-idp-service:bootRun --continuous
 
   workspace-manager:
     container_name: worskpace-manager
     <<: *java-service
     profiles: [ "workspace", "dev" ]
-    working_dir: /workspace/nm-workspace-manager
     ports:
       - "8082:8080"
+      - "5002:5005"
+    command: ./gradlew nm-workspace-manager:bootRun --continuous
 
   code-indexing:
     container_name: code-indexing
     <<: *java-service
     profiles: [ "code-indexing", "dev" ]
-    working_dir: /workspace/nm-code-indexing
     ports:
       - "8083:8080"
+      - "5003:5005"
+    command: ./gradlew nm-code-indexing:bootRun --continuous
 
   gitops:
     container_name: gitops
     <<: *java-service
     profiles: [ "gitops", "dev" ]
-    working_dir: /workspace/nm-gitops
     ports:
       - "8084:8080"
+      - "5004:5005"
+    command: ./gradlew nm-gitops:bootRun --continuous
 
   llm-broker:
     container_name: llm-broker
     <<: *java-service
     profiles: [ "llm-broker", "dev" ]
-    working_dir: /workspace/nm-llm-broker
     ports:
       - "8085:8080"
+      - "5005:5005"
+    command: ./gradlew nm-llm-broker:bootRun --continuous
 
   api-gateway:
     container_name: api-gateway
     <<: *java-service
     profiles: [ "api-gateway", "dev" ]
-    working_dir: /workspace/nm-api-gateway
     ports:
       - "8086:8080"
+      - "5006:5005"
+    command: ./gradlew nm-api-gateway:bootRun --continuous
 
 volumes:
   gradle-cache:

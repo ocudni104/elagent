@@ -20,14 +20,14 @@ ENV PATH=$PNPM_HOME:$PATH
 RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
 # ---- working dir ----
-WORKDIR /apps/frontend
+WORKDIR /workspace/frontend
 
 # ---- permissions ----
 # run as root first
 USER root
 
-RUN mkdir -p /home/app/.pnpm /apps/frontend/node_modules \
- && chown -R ${UID}:${GID} /home/app /apps/frontend
+RUN mkdir -p /home/app/.pnpm /workspace/frontend/node_modules \
+ && chown -R ${UID}:${GID} /home/app /workspace/frontend
 
 
 USER ${UID}

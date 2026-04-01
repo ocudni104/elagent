@@ -223,7 +223,7 @@ Beneficios:
 Ejemplos:
 
 * Frontend → `http://backend:8080`
-* Backend → `postgres:5432`
+* Backend → `nm-postgres:5432`
 
 Puertos expuestos solo para desarrollo:
 
@@ -296,4 +296,3 @@ Se evita el conflicto usando nombres explícitos.
 * HMR roto → `--host` + bind mounts
 * Fallos al instalar tools Go → paths correctos
 * Grupos duplicados → creación condicional
-

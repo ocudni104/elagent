@@ -10,6 +10,10 @@ allprojects {
 }
 
 subprojects {
+    if (path == ":frontend") {
+        return@subprojects
+    }
+
     apply(plugin = "java")
 
     java {

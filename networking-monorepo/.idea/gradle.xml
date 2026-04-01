@@ -9,12 +9,13 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/nm-api-gateway" />
-            <option value="$PROJECT_DIR$/nm-code-indexing" />
-            <option value="$PROJECT_DIR$/nm-gitops" />
-            <option value="$PROJECT_DIR$/nm-idp-service" />
-            <option value="$PROJECT_DIR$/nm-llm-broker" />
-            <option value="$PROJECT_DIR$/nm-workspace-manager" />
+            <option value="$PROJECT_DIR$/frontend" />
+            <option value="$PROJECT_DIR$/services/ai-layer" />
+            <option value="$PROJECT_DIR$/services/app-service" />
+            <option value="$PROJECT_DIR$/services/gateway" />
+            <option value="$PROJECT_DIR$/services/identity-provider" />
+            <option value="$PROJECT_DIR$/services/insights-service" />
+            <option value="$PROJECT_DIR$/services/workers" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -49,9 +49,20 @@ dependencyResolutionManagement {
     //}
 }
 
-include("nm-code-indexing")
-include("nm-gitops")
-include("nm-workspace-manager")
-include("nm-idp-service")
-include("nm-llm-broker")
-include("nm-api-gateway")
+include(
+    ":gateway",
+    ":identity-provider",
+    ":frontend",
+    ":app-service",
+    ":insights-service",
+    ":workers",
+    ":ai-layer",
+)
+
+project(":gateway").projectDir = file("services/gateway")
+project(":identity-provider").projectDir = file("services/identity-provider")
+project(":frontend").projectDir = file("frontend")
+project(":app-service").projectDir = file("services/app-service")
+project(":insights-service").projectDir = file("services/insights-service")
+project(":workers").projectDir = file("services/workers")
+project(":ai-layer").projectDir = file("services/ai-layer")

@@ -1,13 +1,25 @@
 include:
+  - infra.consul.yml
   - infra.kafka.yml
   - infra.postgres.yml
   - infra.qdrant.yml
   - infra.mongodb.yml
 
+x-java-service: &java-service
+  build:
+    context: ../..
+    dockerfile: docker/dev/java-service.dev.Dockerfile
+  environment:
+    CONSUL_HOST: consul
+    CONSUL_PORT: 8500
+    GRADLE_USER_HOME: /tmp/gradle-home
+  volumes:
+    - ../..:/workspace
+
 services:
   frontend:
-    container_name: nm-frontend
-    profiles: [ "frontend", "dev"]
+    container_name: frontend
+    profiles: [ "frontend", "dev" ]
     env_file:
       - .env
     build:
@@ -17,13 +29,13 @@ services:
         UID: ${HOST_UID:-1000}
         GID: ${HOST_GID:-1000}
 
-    working_dir: /apps/frontend
+    working_dir: /workspace/frontend
 
     volumes:
-      - ./apps/frontend:/apps/frontend
-     # - pnpm-store:/home/app/.pnpm
+      - ../../frontend:/workspace/frontend
+      - pnpm-store:/home/app/.pnpm
 
-    command: sh -c "pnpm install && pnpm dev --host"
+    command: sh -c "pnpm install && pnpm dev -- --host"
 
     ports:
       - "4321:4321"
@@ -32,76 +44,70 @@ services:
       NODE_ENV: development
       CI: "true"
 
-
-  # anchor, x- means extension field so this service gets ignored by execution
-  x-java-service: &java-service
-    build:
-      #context: ../..
-      dockerfile: ../dev/java-service.dev.Dockerfile
-  #  environment:
-   #   - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
-
-    volumes:
-      - ../..:/workspace
-      - gradle-cache:/root/.gradle
-
-  idp-service:
-    container_name: idp-service
+  identity-provider:
+    container_name: identity-provider
     # <<: *java-service means inherit all properties from anchor
     <<: *java-service
-    profiles: [ "idp", "dev" ]
+    profiles: [ "identity-provider", "dev" ]
     ports:
-      - "8081:8080"
+      - "8081:8081"
       - "5001:5005"
     environment:
+      CONSUL_HOST: consul
+      CONSUL_PORT: 8500
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
-    command: ./gradlew nm-idp-service:bootRun --continuous
+      APP_SECURITY_ISSUER_URI: http://identity-provider:8081
+    command: sh -c "cd services/identity-provider && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
-  workspace-manager:
-    container_name: worskpace-manager
+  app-service:
+    container_name: app-service
     <<: *java-service
-    profiles: [ "workspace", "dev" ]
+    profiles: [ "app-service", "dev" ]
     ports:
       - "8082:8080"
       - "5002:5005"
-    command: ./gradlew nm-workspace-manager:bootRun --continuous
+    command: sh -c "cd services/app-service && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
-  code-indexing:
-    container_name: code-indexing
+  channel-service:
+    container_name: channel-service
     <<: *java-service
-    profiles: [ "code-indexing", "dev" ]
+    profiles: [ "channel-service", "dev" ]
     ports:
       - "8083:8080"
       - "5003:5005"
-    command: ./gradlew nm-code-indexing:bootRun --continuous
+    command: sh -c "cd services/channel-service && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
-  gitops:
-    container_name: gitops
+  insights-service:
+    container_name: insights-service
     <<: *java-service
-    profiles: [ "gitops", "dev" ]
+    profiles: [ "insights-service", "dev" ]
     ports:
       - "8084:8080"
       - "5004:5005"
-    command: ./gradlew nm-gitops:bootRun --continuous
+    command: sh -c "cd services/insights-service && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
-  llm-broker:
-    container_name: llm-broker
+  ai-layer:
+    container_name: ai-layer
     <<: *java-service
-    profiles: [ "llm-broker", "dev" ]
+    profiles: [ "ai-layer", "dev" ]
     ports:
       - "8085:8080"
       - "5005:5005"
-    command: ./gradlew nm-llm-broker:bootRun --continuous
+    command: sh -c "cd services/ai-layer && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
-  api-gateway:
-    container_name: api-gateway
+  gateway:
+    container_name: gateway
     <<: *java-service
-    profiles: [ "api-gateway", "dev" ]
+    profiles: [ "gateway", "dev" ]
     ports:
       - "8086:8080"
       - "5006:5005"
-    command: ./gradlew nm-api-gateway:bootRun --continuous
+    environment:
+      CONSUL_HOST: consul
+      CONSUL_PORT: 8500
+      IDP_ISSUER_URI: http://identity-provider:8081
+    command: sh -c "cd services/gateway && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
 volumes:
-  gradle-cache:
+  pnpm-store:

@@ -17,11 +17,11 @@ services:
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
       - ME_CONFIG_MONGODB_ADMINPASSWORD=tu_password_fuerte
-      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_SERVER=mongodb
       - ME_CONFIG_BASICAUTH_USERNAME=webadmin # Usuario para entrar a la web
       - ME_CONFIG_BASICAUTH_PASSWORD=webpass  # Pass para entrar a la web
     ports:
-      - "8081:8081"
+      - "8087:8081"
     depends_on:
       - mongodb
     restart: always

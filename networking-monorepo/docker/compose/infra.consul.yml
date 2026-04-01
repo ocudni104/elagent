@@ -1,0 +1,13 @@
+services:
+  consul:
+    image: hashicorp/consul:1.20
+    container_name: consul
+    command: agent -dev -client=0.0.0.0 -ui
+    ports:
+      - "8500:8500"
+    volumes:
+      - consul-data:/consul/data
+    restart: always
+
+volumes:
+  consul-data:

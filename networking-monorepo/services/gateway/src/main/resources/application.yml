@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: nm-api-gateway
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        service-name: gateway
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${IDP_ISSUER_URI:http://localhost:8081}
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      server:
+        webflux:
+          routes:
+            - id: idp
+              uri: lb://identity-provider
+              predicates:
+                - Path=/api/idp/**
+              filters:
+                - StripPrefix=2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

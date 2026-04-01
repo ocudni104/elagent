@@ -9,12 +9,57 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/nm-api-gateway" />
-            <option value="$PROJECT_DIR$/nm-code-indexing" />
-            <option value="$PROJECT_DIR$/nm-gitops" />
-            <option value="$PROJECT_DIR$/nm-idp-service" />
-            <option value="$PROJECT_DIR$/nm-llm-broker" />
-            <option value="$PROJECT_DIR$/nm-workspace-manager" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/ai-layer" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/services/ai-layer" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/app-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/services/app-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/channel-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/services/channel-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/gateway" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/services/gateway" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/identity-provider" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/insights-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/services/insights-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/workers" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/services/workers" />
           </set>
         </option>
       </GradleProjectSettings>

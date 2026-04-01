@@ -135,6 +135,18 @@ sudo install lazydocker /usr/local/bin/lazydocker
 rm -f lazydocker lazydocker.tar.gz
 ```
 
+Install on Windows with Scoop:
+
+```powershell
+scoop install lazydocker
+```
+
+Install on Windows with Chocolatey:
+
+```powershell
+choco install lazydocker
+```
+
 ### dive
 
 Useful for inspecting image layers, wasted space, and Dockerfile effects.
@@ -145,4 +157,16 @@ Install on Debian/Ubuntu:
 curl -fsSL https://github.com/wagoodman/dive/releases/latest/download/dive_$(uname -s)_$(dpkg --print-architecture).deb -o dive.deb
 sudo apt install -y ./dive.deb
 rm -f dive.deb
+```
+
+Install on Windows with Scoop:
+
+```powershell
+scoop install dive
+```
+
+Install on Windows with Chocolatey:
+
+```powershell
+choco install dive
 ```

@@ -120,6 +120,50 @@ cd services/identity-provider
 - `nm-postgres` is the local Postgres service name in Docker
 - root Gradle is no longer a multi-project backend build; service ownership is local to each service directory
 
+## Devcontainer
+
+This repo includes a single repo-level devcontainer for the whole monorepo:
+
+- [`.devcontainer/devcontainer.json`](/home/wmonkey/Work/d-esc-ctrl/networking-monorepo/.devcontainer/devcontainer.json)
+- [`.devcontainer/Dockerfile`](/home/wmonkey/Work/d-esc-ctrl/networking-monorepo/.devcontainer/Dockerfile)
+
+It is a tooling container, not an app runtime container. Use it as a consistent workstation for Gradle, Atlas, `psql`, frontend commands, and general repo work while runtime services continue to run through Docker Compose.
+
+Included tools:
+
+- JDK 25
+- shared Gradle wrapper usage from the repo
+- git, curl, unzip, bash
+- Atlas CLI
+- PostgreSQL client tools
+- Node.js 22 and pnpm via Corepack
+- Docker CLI
+
+Basic usage inside the devcontainer:
+
+```bash
+cd services/gateway
+../../gradlew tasks
+```
+
+```bash
+cd persistence/atlas
+atlas migrate diff init --env local
+```
+
+```bash
+cd frontend
+pnpm install
+pnpm dev
+```
+
+Windows caveats:
+
+- this setup assumes standard VS Code Dev Containers usage with Docker Desktop
+- if you are on Windows, opening the repo through WSL2-backed Docker Desktop is the most reliable path
+- Docker access from inside the devcontainer assumes the host Docker socket is available at `/var/run/docker.sock`
+- if socket mounting is unavailable in your environment, the devcontainer still works as a tooling container, but Docker commands from inside it will not
+
 ## Recommended Tools
 
 ### lazydocker

@@ -9,12 +9,56 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/frontend" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/ai-layer" />
+        <option name="modules">
+          <set>
             <option value="$PROJECT_DIR$/services/ai-layer" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/app-service" />
+        <option name="modules">
+          <set>
             <option value="$PROJECT_DIR$/services/app-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/channel-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/services/channel-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/gateway" />
+        <option name="modules">
+          <set>
             <option value="$PROJECT_DIR$/services/gateway" />
-            <option value="$PROJECT_DIR$/services/identity-provider" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/identity-provider" />
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/insights-service" />
+        <option name="modules">
+          <set>
             <option value="$PROJECT_DIR$/services/insights-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/services/workers" />
+        <option name="modules">
+          <set>
             <option value="$PROJECT_DIR$/services/workers" />
           </set>
         </option>

@@ -5,6 +5,17 @@ include:
   - infra.qdrant.yml
   - infra.mongodb.yml
 
+x-java-service: &java-service
+  build:
+    context: ../..
+    dockerfile: docker/dev/java-service.dev.Dockerfile
+  environment:
+    CONSUL_HOST: consul
+    CONSUL_PORT: 8500
+    GRADLE_USER_HOME: /tmp/gradle-home
+  volumes:
+    - ../..:/workspace
+
 services:
   frontend:
     container_name: frontend
@@ -33,38 +44,21 @@ services:
       NODE_ENV: development
       CI: "true"
 
-
-  # anchor, x- means extension field so this service gets ignored by execution
-  x-java-service: &java-service
-    build:
-      context: ../..
-      dockerfile: ../dev/java-service.dev.Dockerfile
-  #  environment:
-   #   - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
-
-    environment:
-      CONSUL_HOST: consul
-      CONSUL_PORT: 8500
-
-    volumes:
-      - ../..:/workspace
-      - gradle-cache:/root/.gradle
-
   identity-provider:
     container_name: identity-provider
     # <<: *java-service means inherit all properties from anchor
     <<: *java-service
     profiles: [ "identity-provider", "dev" ]
     ports:
-      - "8081:8080"
+      - "8081:8081"
       - "5001:5005"
     environment:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
-      APP_SECURITY_ISSUER_URI: http://identity-provider:8080
-    command: ./gradlew identity-provider:bootRun --continuous
+      APP_SECURITY_ISSUER_URI: http://identity-provider:8081
+    command: sh -c "cd services/identity-provider && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
   app-service:
     container_name: app-service
@@ -73,25 +67,25 @@ services:
     ports:
       - "8082:8080"
       - "5002:5005"
-    command: ./gradlew app-service:bootRun --continuous
+    command: sh -c "cd services/app-service && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
+
+  channel-service:
+    container_name: channel-service
+    <<: *java-service
+    profiles: [ "channel-service", "dev" ]
+    ports:
+      - "8083:8080"
+      - "5003:5005"
+    command: sh -c "cd services/channel-service && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
   insights-service:
     container_name: insights-service
     <<: *java-service
     profiles: [ "insights-service", "dev" ]
     ports:
-      - "8083:8080"
-      - "5003:5005"
-    command: ./gradlew insights-service:bootRun --continuous
-
-  workers:
-    container_name: workers
-    <<: *java-service
-    profiles: [ "workers", "dev" ]
-    ports:
       - "8084:8080"
       - "5004:5005"
-    command: ./gradlew workers:bootRun --continuous
+    command: sh -c "cd services/insights-service && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
   ai-layer:
     container_name: ai-layer
@@ -100,7 +94,7 @@ services:
     ports:
       - "8085:8080"
       - "5005:5005"
-    command: ./gradlew ai-layer:bootRun --continuous
+    command: sh -c "cd services/ai-layer && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
   gateway:
     container_name: gateway
@@ -112,9 +106,8 @@ services:
     environment:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
-      IDP_ISSUER_URI: http://identity-provider:8080
-    command: ./gradlew gateway:bootRun --continuous
+      IDP_ISSUER_URI: http://identity-provider:8081
+    command: sh -c "cd services/gateway && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
 volumes:
-  gradle-cache:
   pnpm-store:

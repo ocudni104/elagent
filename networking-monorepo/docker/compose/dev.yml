@@ -58,7 +58,7 @@ services:
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
       APP_SECURITY_ISSUER_URI: http://identity-provider:8081
-    command: sh -c "cd services/identity-provider && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
+    command: sh -c "cd services/identity-provider && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
 
   app-service:
     container_name: app-service

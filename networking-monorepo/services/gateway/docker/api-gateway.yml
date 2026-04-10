@@ -15,4 +15,4 @@ services:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     # EL COMANDO CLAVE: Arranca desde clases, NO desde un jar
     command: >
-      java -cp /app/resources:/app/classes:/app/libs/* com.example.Main
+      java -cp /app/resources:/app/classes:/app/libs/* ocudni104.gateway.GatewayApplication

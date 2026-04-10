@@ -1,15 +1,42 @@
+import org.springframework.boot.gradle.tasks.run.BootRun
+
 plugins {
     id("java")
     alias(libs.plugins.spring.boot)
 }
 
-group = "com.example"
+group = "ocudni104"
 version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
+}
+
+val appMainClass = "ocudni104.channel.ChannelServiceApplication"
+
+springBoot {
+    mainClass.set(appMainClass)
+}
+
+tasks.named<BootRun>("bootRun") {
+    mainClass.set(appMainClass)
+    systemProperty(
+        "spring.profiles.active",
+        System.getProperty("spring.profiles.active") ?: "local"
+    )
+}
+
+tasks.register<BootRun>("bootRunInContainer") {
+    group = "application"
+    description = "Run the app with the container ready profile"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set(appMainClass)
+    systemProperty(
+        "spring.profiles.active",
+        System.getProperty("spring.profiles.active") ?: "container"
+    )
 }
 
 tasks.withType<Test> {

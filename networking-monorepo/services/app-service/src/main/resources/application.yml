@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: app-service
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    org.springframework.web: INFO
+    ocudni104.appservice: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

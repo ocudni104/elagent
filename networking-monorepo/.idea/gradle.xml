@@ -46,6 +46,11 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/services/identity-provider" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/services/identity-provider" />
+          </set>
+        </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/services/insights-service" />

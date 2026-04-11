@@ -58,7 +58,7 @@ services:
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       APP_SECURITY_ISSUER_URI: http://identity-provider:8081
-    command: sh -c "cd services/identity-provider && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
+    command: sh -c "cd services/identity-provider && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRunInContainer"
 
   app-service:
     container_name: app-service
@@ -71,7 +71,7 @@ services:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
       IDP_ISSUER_URI: http://identity-provider:8081
-    command: sh -c "cd services/app-service && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
+    command: sh -c "cd services/app-service && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRunInContainer"
 
   channel-service:
     container_name: channel-service
@@ -80,7 +80,7 @@ services:
     ports:
       - "8083:8080"
       - "5003:5005"
-    command: sh -c "cd services/channel-service && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
+    command: sh -c "cd services/channel-service && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRunInContainer"
 
   insights-service:
     container_name: insights-service
@@ -89,7 +89,7 @@ services:
     ports:
       - "8084:8080"
       - "5004:5005"
-    command: sh -c "cd services/insights-service && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
+    command: sh -c "cd services/insights-service && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRunInContainer"
 
   ai-layer:
     container_name: ai-layer
@@ -98,7 +98,7 @@ services:
     ports:
       - "8085:8080"
       - "5005:5005"
-    command: sh -c "cd services/ai-layer && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
+    command: sh -c "cd services/ai-layer && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRunInContainer"
 
   gateway:
     container_name: gateway
@@ -111,7 +111,7 @@ services:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
       IDP_ISSUER_URI: http://identity-provider:8081
-    command: sh -c "cd services/gateway && ../../gradlew --project-cache-dir /tmp/gradle-project-cache bootRun"
+    command: sh -c "cd services/gateway && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRunInContainer"
 
 volumes:
   pnpm-store:

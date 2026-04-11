@@ -1,0 +1,32 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: workspace-manager
+  main:
+    web-application-type: reactive
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        service-name: app-service
+        prefer-ip-address: true
+        health-check-path: /actuator/health
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${IDP_ISSUER_URI:http://localhost:8081}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    org.springframework.web: INFO
+    com.example.nm-workspace-manager: DEBUG
+

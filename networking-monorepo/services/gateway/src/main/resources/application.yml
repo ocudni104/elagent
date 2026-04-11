@@ -14,24 +14,32 @@ spring:
         service-name: gateway
         prefer-ip-address: true
         health-check-path: /actuator/health
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${IDP_ISSUER_URI:http://localhost:8081}
     gateway:
-      discovery:
-        locator:
-          enabled: true
       server:
         webflux:
+          discovery:
+            locator:
+              enabled: true
           routes:
+            - id: app-service
+              uri: lb://app-service
+              predicates:
+                - Path=/hello
             - id: idp
               uri: lb://identity-provider
               predicates:
                 - Path=/api/idp/**
               filters:
                 - StripPrefix=2
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${IDP_ISSUER_URI:http://localhost:8081}
+
+app:
+  idp:
+    internal-uri: ${IDP_ISSUER_URI:http://localhost:8081}
 
 management:
   endpoints:

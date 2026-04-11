@@ -1,14 +1,21 @@
 package ng.elagent.idp.config;
 
 import ng.elagent.idp.federation.FederatedIdentityAuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.savedrequest.NullRequestCache;
 
 @Configuration
 public class SecurityConfig {
+
+    @Value("${app.gateway-url:http://localhost:8080}")
+    private String gatewayUrl;
 
     @Bean
     @Order(2)
@@ -24,9 +31,19 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
-                .successHandler(new FederatedIdentityAuthenticationSuccessHandler())
+                .successHandler(new FederatedIdentityAuthenticationSuccessHandler(gatewayUrl))
             )
-            .formLogin(form -> form.loginPage("/login").permitAll());
+            // Internal API endpoints called by the gateway must return 401, not a login redirect,
+            // and must never be saved as a post-login destination.
+            .requestCache(cache -> cache
+                .requestCache(new NullRequestCache())
+            )
+            .exceptionHandling(ex -> ex
+                .defaultAuthenticationEntryPointFor(
+                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                        request -> request.getServletPath().startsWith("/internal/")
+                )
+            );
 
         return http.build();
     }

@@ -1,13 +1,13 @@
-package com.example;
+package ng.elagent.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Main {
+public class AppServiceApplication {
 
     public static void main(String[] args) {
         // Esta línea arranca todo el contexto de Spring
-        SpringApplication.run(Main.class, args);
+        SpringApplication.run(AppServiceApplication.class, args);
     }
 }

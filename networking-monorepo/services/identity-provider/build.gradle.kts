@@ -1,7 +1,7 @@
 
 plugins {
     id("java")
-    id("org.springframework.boot")
+    alias(libs.plugins.spring.boot)
 }
 
 group = "com.example"

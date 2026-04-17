@@ -15,20 +15,26 @@ import java.io.IOException;
 
 public class FederatedIdentityAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final AuthenticationSuccessHandler delegate = new SavedRequestAwareAuthenticationSuccessHandler();
+    private final AuthenticationSuccessHandler delegate;
+
+    public FederatedIdentityAuthenticationSuccessHandler(String defaultTargetUrl) {
+        SavedRequestAwareAuthenticationSuccessHandler handler = new SavedRequestAwareAuthenticationSuccessHandler();
+        handler.setDefaultTargetUrl(defaultTargetUrl);
+        this.delegate = handler;
+    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
 
         if (authentication instanceof OAuth2AuthenticationToken oauthToken) {
-            String githubLogin = oauthToken.getPrincipal().getAttribute("login");
-            if (githubLogin == null) {
-                githubLogin = oauthToken.getPrincipal().getName();
+            String email = oauthToken.getPrincipal().getAttribute("email");
+            if (email == null) {
+                email = oauthToken.getPrincipal().getName();
             }
 
             UsernamePasswordAuthenticationToken localAuth = UsernamePasswordAuthenticationToken.authenticated(
-                    githubLogin,
+                    email,
                     null,
                     AuthorityUtils.createAuthorityList("ROLE_USER")
             );

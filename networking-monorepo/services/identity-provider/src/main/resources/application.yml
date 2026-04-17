@@ -8,13 +8,14 @@ spring:
     oauth2:
       client:
         registration:
-          github:
-            client-id: ${GITHUB_CLIENT_ID}
-            client-secret: ${GITHUB_CLIENT_SECRET}
-            scope: read:user, user:email
-        provider:
-          github:
-            user-name-attribute: login
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: openid, profile, email
+            redirect-uri: ${GATEWAY_BASE_URL:http://localhost:8080}/api/idp/login/oauth2/code/google
+
+app:
+  gateway-url: ${GATEWAY_BASE_URL:http://localhost:8080}
 
 logging:
   level:

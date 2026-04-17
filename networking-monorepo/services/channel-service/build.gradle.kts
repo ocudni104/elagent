@@ -2,7 +2,9 @@ import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
     id("java")
+    id("maven-publish")
     alias(libs.plugins.spring.boot)
+
 }
 
 group = "ocudni104"

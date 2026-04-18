@@ -3,6 +3,10 @@ build/
 
 # Secrets
 docker/compose/.env
+.env
+**/.env
+**/.env.*
+!**/.env.example
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/

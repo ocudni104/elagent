@@ -1,6 +1,8 @@
 package ocudni104.idp.config;
 
 import ocudni104.idp.federation.FederatedIdentityAuthenticationSuccessHandler;
+import ocudni104.idp.session.application.CreateSessionUseCase;
+import ocudni104.idp.user.application.FindOrCreateUserFromFederatedLoginUseCase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,9 +19,16 @@ public class SecurityConfig {
     @Value("${app.frontend-url:http://localhost:4321}")
     private String frontendUrl;
 
+    @Value("${auth.session.cookie-name:sid}")
+    private String sessionCookieName;
+
     @Bean
     @Order(2)
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain defaultSecurityFilterChain(
+            HttpSecurity http,
+            FindOrCreateUserFromFederatedLoginUseCase findOrCreateUserFromFederatedLoginUseCase,
+            CreateSessionUseCase createSessionUseCase
+    ) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
@@ -31,7 +40,12 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
-                .successHandler(new FederatedIdentityAuthenticationSuccessHandler(frontendUrl))
+                .successHandler(new FederatedIdentityAuthenticationSuccessHandler(
+                        frontendUrl,
+                        findOrCreateUserFromFederatedLoginUseCase,
+                        createSessionUseCase,
+                        sessionCookieName
+                ))
             )
             // Internal API endpoints called by the gateway must return 401, not a login redirect,
             // and must never be saved as a post-login destination.

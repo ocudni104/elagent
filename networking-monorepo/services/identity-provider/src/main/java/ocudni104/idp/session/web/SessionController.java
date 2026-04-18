@@ -9,8 +9,8 @@ import ocudni104.idp.session.application.ValidateSessionUseCase;
 import ocudni104.idp.session.domain.DeviceId;
 import ocudni104.idp.session.domain.Session;
 import ocudni104.idp.session.domain.SessionId;
-import ocudni104.idp.session.domain.TenantId;
-import ocudni104.idp.session.domain.UserId;
+import ocudni104.idp.tenant.domain.TenantId;
+import ocudni104.idp.user.domain.UserId;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

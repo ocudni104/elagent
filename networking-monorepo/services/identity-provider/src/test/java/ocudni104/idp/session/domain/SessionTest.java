@@ -1,6 +1,8 @@
 package ocudni104.idp.session.domain;
 
 import org.junit.jupiter.api.Test;
+import ocudni104.idp.tenant.domain.TenantId;
+import ocudni104.idp.user.domain.UserId;
 
 import java.time.Clock;
 import java.time.Instant;

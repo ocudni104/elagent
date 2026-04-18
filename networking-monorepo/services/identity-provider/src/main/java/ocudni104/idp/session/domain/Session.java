@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Singular;
 import lombok.Value;
 import lombok.experimental.Accessors;
+import ocudni104.idp.tenant.domain.TenantId;
+import ocudni104.idp.user.domain.UserId;
 
 import java.util.Set;
 

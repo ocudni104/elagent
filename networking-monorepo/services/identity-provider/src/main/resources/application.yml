@@ -20,6 +20,7 @@ app:
 
 auth:
   session:
+    cookie-name: sid
     absolute-ttl: 8h
 
 logging:

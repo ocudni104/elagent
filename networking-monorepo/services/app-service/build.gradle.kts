@@ -49,12 +49,17 @@ dependencies {
     implementation(platform(libs.spring.boot.bom))
     implementation(platform(libs.spring.cloud.bom))
     implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.jdbc)
     implementation(libs.spring.boot.starter.webflux)
     implementation(libs.spring.cloud.starter.consul.discovery)
     testImplementation(libs.spring.boot.starter.test)
     implementation(libs.spring.boot.starter.oauth2.resource.server)
 
     developmentOnly(libs.spring.boot.devtools)
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 
     // import JUnit BOM
     testImplementation(platform(libs.junit.bom))

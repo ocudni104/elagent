@@ -1,7 +1,48 @@
 ---
 import AppLayout from "../../layouts/AppLayout.astro";
+
+const backendUrl = import.meta.env.PUBLIC_BACKEND_URL ?? "http://localhost:8080";
+const cookie = Astro.request.headers.get("cookie") ?? "";
+
+let me = null;
+let loadError = null;
+
+try {
+  const response = await fetch(`${backendUrl}/api/app/me`, {
+    headers: cookie ? { cookie } : undefined
+  });
+
+  if (response.ok) {
+    me = await response.json();
+  } else {
+    loadError = `Backend returned ${response.status}`;
+  }
+} catch (error) {
+  loadError = error instanceof Error ? error.message : "Unknown error";
+}
 ---
 <AppLayout title="App Home · Westats">
   <h1>App Home</h1>
-  <p>Protected area placeholder.</p>
+
+  {me ? (
+    <>
+      <p>Logged in as {me.email ?? me.userId}.</p>
+      <dl>
+        <dt>User ID</dt>
+        <dd>{me.userId}</dd>
+        <dt>Session ID</dt>
+        <dd>{me.sessionId}</dd>
+        <dt>Email</dt>
+        <dd>{me.email ?? "N/A"}</dd>
+        <dt>Tenant ID</dt>
+        <dd>{me.tenantId ?? "N/A"}</dd>
+        <dt>Roles</dt>
+        <dd>{me.roles?.length ? me.roles.join(", ") : "N/A"}</dd>
+        <dt>Scopes</dt>
+        <dd>{me.scopes?.length ? me.scopes.join(", ") : "N/A"}</dd>
+      </dl>
+    </>
+  ) : (
+    <p>Could not load current user info{loadError ? `: ${loadError}` : "."}</p>
+  )}
 </AppLayout>

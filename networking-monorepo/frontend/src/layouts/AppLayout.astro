@@ -1,0 +1,30 @@
+---
+const { title = "App · Westats" } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/app">Westats App</a>
+        <a href="/">Public Site</a>
+        <a href="/login">Logout</a>
+      </nav>
+    </header>
+
+    <aside>
+      <ul>
+        <li><a href="/app">Home</a></li>
+      </ul>
+    </aside>
+
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

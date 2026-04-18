@@ -1,4 +1,4 @@
-FROM node:20-bookworm
+FROM node:22-bookworm
 
 # ---- build args for /HOST_UID/GID parity ----
 ARG UID=1000
@@ -17,7 +17,7 @@ RUN set -eux; \
 ENV PNPM_HOME=/home/app/.pnpm
 ENV PATH=$PNPM_HOME:$PATH
 
-RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
+RUN corepack enable && corepack prepare pnpm@10.33.0 --activate
 
 # ---- working dir ----
 WORKDIR /workspace/frontend

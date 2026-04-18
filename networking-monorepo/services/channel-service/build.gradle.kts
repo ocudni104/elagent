@@ -50,6 +50,7 @@ dependencies {
     implementation(platform(libs.spring.cloud.bom))
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.jdbc)
+    runtimeOnly(libs.postgresql)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.cloud.starter.consul.discovery)
 

@@ -48,6 +48,7 @@ dependencies {
     implementation(platform(libs.spring.boot.bom))
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.jdbc)
+    runtimeOnly(libs.postgresql)
     testImplementation(libs.spring.boot.starter.test)
 
     implementation(platform(libs.spring.cloud.bom))

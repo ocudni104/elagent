@@ -46,16 +46,26 @@ tasks.withType<Test> {
 }
 
 dependencies {
+    // Base
+
+
     // Spring boot
     implementation(platform(libs.spring.boot.bom))
     implementation(platform(libs.spring.cloud.bom))
     implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.jdbc)
+    runtimeOnly(libs.postgresql)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.security)
     implementation(libs.spring.cloud.starter.consul.discovery)
     implementation(libs.spring.authorization.server)
     implementation(libs.spring.boot.starter.oauth2.client)
+    testImplementation(libs.spring.boot.starter.test)
     developmentOnly(libs.spring.boot.devtools)
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 
 
     // import JUnit BOM

@@ -14,8 +14,8 @@ import org.springframework.security.web.savedrequest.NullRequestCache;
 @Configuration
 public class SecurityConfig {
 
-    @Value("${app.gateway-url:http://localhost:8080}")
-    private String gatewayUrl;
+    @Value("${app.frontend-url:http://localhost:4321}")
+    private String frontendUrl;
 
     @Bean
     @Order(2)
@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
-                .successHandler(new FederatedIdentityAuthenticationSuccessHandler(gatewayUrl))
+                .successHandler(new FederatedIdentityAuthenticationSuccessHandler(frontendUrl))
             )
             // Internal API endpoints called by the gateway must return 401, not a login redirect,
             // and must never be saved as a post-login destination.

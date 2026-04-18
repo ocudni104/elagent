@@ -1,7 +1,12 @@
 ---
 import AppLayout from "../../layouts/AppLayout.astro";
 
-const backendUrl = import.meta.env.PUBLIC_BACKEND_URL ?? "http://localhost:8080";
+export const prerender = false;
+
+const backendUrl =
+  import.meta.env.INTERNAL_BACKEND_URL ??
+  import.meta.env.PUBLIC_BACKEND_URL ??
+  "http://localhost:8080";
 const cookie = Astro.request.headers.get("cookie") ?? "";
 
 let me = null;

@@ -16,7 +16,7 @@ spring:
 
 app:
   gateway-url: ${GATEWAY_BASE_URL:http://localhost:8080}
-  frontend-url: ${FRONTEND_BASE_URL:http://localhost:4321}
+  frontend-url: ${FRONTEND_BASE_URL:http://localhost:4321/app}
 
 auth:
   session:

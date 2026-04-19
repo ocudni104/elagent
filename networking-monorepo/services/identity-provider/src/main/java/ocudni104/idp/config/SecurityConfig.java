@@ -9,8 +9,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.context.NullSecurityContextRepository;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
 @Configuration
@@ -26,6 +30,7 @@ public class SecurityConfig {
     @Order(2)
     public SecurityFilterChain defaultSecurityFilterChain(
             HttpSecurity http,
+            AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository,
             FindOrCreateUserFromFederatedLoginUseCase findOrCreateUserFromFederatedLoginUseCase,
             CreateSessionUseCase createSessionUseCase
     ) throws Exception {
@@ -40,7 +45,17 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
             )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+            .securityContext(securityContext -> securityContext
+                .securityContextRepository(new NullSecurityContextRepository())
+                .requireExplicitSave(false)
+            )
             .oauth2Login(oauth2 -> oauth2
+                .authorizationEndpoint(endpoint -> endpoint
+                    .authorizationRequestRepository(authorizationRequestRepository)
+                )
                 .successHandler(new FederatedIdentityAuthenticationSuccessHandler(
                         frontendUrl,
                         findOrCreateUserFromFederatedLoginUseCase,

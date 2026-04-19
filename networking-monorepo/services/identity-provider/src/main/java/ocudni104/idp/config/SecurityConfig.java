@@ -40,6 +40,7 @@ public class SecurityConfig {
                     "/.well-known/openid-configuration",
                     "/oauth2/jwks",
                     "/internal/token",
+                    "/me",
                     "/actuator/health",
                     "/error"
                 ).permitAll()

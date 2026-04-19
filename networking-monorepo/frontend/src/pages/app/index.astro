@@ -13,7 +13,7 @@ let me = null;
 let loadError = null;
 
 try {
-  const response = await fetch(`${backendUrl}/api/app/me`, {
+  const response = await fetch(`${backendUrl}/api/idp/me`, {
     headers: cookie ? { cookie } : undefined
   });
 

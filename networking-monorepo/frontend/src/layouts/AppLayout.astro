@@ -1,5 +1,10 @@
 ---
-const { title = "App · Westats" } = Astro.props;
+import "../styles/base.css";
+
+const {
+  title = "App · Westats",
+  currentPath = "/app"
+} = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -10,18 +15,16 @@ const { title = "App · Westats" } = Astro.props;
   </head>
   <body>
     <header>
-      <nav>
-        <a href="/app">Westats App</a>
-        <a href="/">Public Site</a>
-        <a href="/login">Logout</a>
+      <nav class="topbar">
+        <a href="/app" class="brand">Westats</a>
+        <div class="topbar-menu">
+          <a href="/app" class:list={{ active: currentPath === "/app" }}>Home</a>
+          <a href="/app/insights" class:list={{ active: currentPath === "/app/insights" }}>Insights</a>
+          <a href="/app/cards" class:list={{ active: currentPath === "/app/cards" }}>Cards</a>
+        </div>
+        <a href="/login" class="logout-link">Account</a>
       </nav>
     </header>
-
-    <aside>
-      <ul>
-        <li><a href="/app">Home</a></li>
-      </ul>
-    </aside>
 
     <main>
       <slot />

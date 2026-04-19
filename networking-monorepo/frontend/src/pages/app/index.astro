@@ -25,9 +25,43 @@ try {
 } catch (error) {
   loadError = error instanceof Error ? error.message : "Unknown error";
 }
+
+const channelTitle = me?.email
+  ? `${me.email.split("@")[0]}'s Channel`
+  : "Channel Overview";
+
+const factItems = me
+  ? [
+      { label: "Email", value: me.email ?? "N/A" },
+      { label: "Session", value: me.sessionId ?? "N/A" },
+      { label: "Tenant", value: me.tenantId ?? "N/A" }
+    ]
+  : [];
 ---
-<AppLayout title="App Home · Westats">
-  <h1>App Home</h1>
+<AppLayout title={`${channelTitle} · Westats`} currentPath="/app">
+  <section class="channel-banner">
+    <div class="channel-badge" aria-hidden="true">
+      {channelTitle.slice(0, 1)}
+    </div>
+
+    <div class="channel-banner-copy">
+      <p class="channel-kicker">Channel</p>
+      <h1>{channelTitle}</h1>
+
+      {factItems.length ? (
+        <dl class="channel-facts">
+          {factItems.map((item) => (
+            <div>
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : (
+        <p class="channel-empty">Sign in to load channel details.</p>
+      )}
+    </div>
+  </section>
 
   {me ? (
     <>

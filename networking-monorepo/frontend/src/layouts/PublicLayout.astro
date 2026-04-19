@@ -1,4 +1,6 @@
 ---
+import "../styles/base.css";
+
 const { title = "Westats" } = Astro.props;
 ---
 <!doctype html>
@@ -9,13 +11,6 @@ const { title = "Westats" } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <header>
-      <nav>
-        <a href="/">Westats</a>
-        <a href="/login">Login</a>
-      </nav>
-    </header>
-
     <main>
       <slot />
     </main>

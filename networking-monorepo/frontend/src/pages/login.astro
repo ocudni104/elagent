@@ -1,0 +1,14 @@
+---
+import AuthLayout from "../layouts/AuthLayout.astro";
+
+const backendUrl = import.meta.env.PUBLIC_BACKEND_URL ?? "http://localhost:8080";
+const googleLoginUrl = `${backendUrl}/api/idp/oauth2/authorization/google`;
+---
+<AuthLayout title="Login · Westats">
+  <h1>Login</h1>
+  <p>Sign in with Google to connect your YouTube account.</p>
+
+  <p>
+    <a href={googleLoginUrl}>Continue with Google</a>
+  </p>
+</AuthLayout>

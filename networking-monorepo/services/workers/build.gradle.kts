@@ -21,9 +21,15 @@ dependencies {
     // Spring boot
     implementation(platform(libs.spring.boot.bom))
     implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.jdbc)
+    runtimeOnly(libs.postgresql)
     implementation(libs.spring.boot.starter.actuator)
     testImplementation(libs.spring.boot.starter.test)
     developmentOnly(libs.spring.boot.devtools)
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 
 
     // import JUnit BOM

@@ -26,6 +26,25 @@ This repository is a monorepo with:
 └─ gradlew
 ```
 
+## Identity Provider Session Slice
+
+The identity-provider now includes a feature-oriented session slice under `services/identity-provider/src/main/java/ocudni104/idp/session`:
+
+```text
+session/
+├─ application/
+├─ domain/
+├─ persistence/
+└─ web/
+```
+
+Intent by folder:
+
+- `domain`: session entity, typed ID value objects, repository contract, domain exceptions
+- `application`: use cases and commands
+- `persistence`: JDBC repository implementation
+- `web`: request/response DTOs, controller, HTTP exception mapping
+
 ## How It Runs
 
 - `frontend/` is not part of a Gradle multi-project build
@@ -41,7 +60,7 @@ This repository is a monorepo with:
 
 Optional but useful:
 
-- Java 25 if you want to run services directly outside Docker
+- Java 21 if you want to run services directly outside Docker
 - Node.js and pnpm if you want to run the frontend directly outside Docker
 
 ## Run Everything
@@ -119,6 +138,7 @@ cd services/identity-provider
 - `gateway` resolves `identity-provider` through discovery-aware Spring Cloud wiring
 - `nm-postgres` is the local Postgres service name in Docker
 - root Gradle is no longer a multi-project backend build; service ownership is local to each service directory
+- local Codex plugin `caveman` is present in `plugins/caveman`
 
 ## Devcontainer
 
@@ -131,7 +151,7 @@ It is a tooling container, not an app runtime container. Use it as a consistent 
 
 Included tools:
 
-- JDK 25
+- JDK 21
 - shared Gradle wrapper usage from the repo
 - git, curl, unzip, bash
 - Atlas CLI

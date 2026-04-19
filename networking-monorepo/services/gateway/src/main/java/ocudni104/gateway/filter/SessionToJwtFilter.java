@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 import java.util.Map;
 
 /**
- * Runs before Spring Security (-100). When a browser request carries a JSESSIONID cookie
+ * Runs before Spring Security (-100). When a browser request carries a sid cookie
  * but no Authorization header, this filter calls the IDP's /internal/token endpoint to
  * exchange the session for a short-lived JWT, then injects it as "Authorization: Bearer …"
  * so the downstream JWT resource-server validation works transparently.
@@ -24,6 +24,7 @@ import java.util.Map;
 public class SessionToJwtFilter implements WebFilter {
 
     private final WebClient idpClient;
+    private static final String SESSION_COOKIE_NAME = "sid";
 
     public SessionToJwtFilter(@Value("${app.idp.internal-uri:http://localhost:8081}") String idpUri) {
         this.idpClient = WebClient.builder().baseUrl(idpUri).build();
@@ -43,14 +44,14 @@ public class SessionToJwtFilter implements WebFilter {
             return chain.filter(exchange);
         }
 
-        var sessionCookie = exchange.getRequest().getCookies().getFirst("JSESSIONID");
+        var sessionCookie = exchange.getRequest().getCookies().getFirst(SESSION_COOKIE_NAME);
         if (sessionCookie == null) {
             return chain.filter(exchange);
         }
 
         return idpClient.get()
                 .uri("/internal/token")
-                .cookie("JSESSIONID", sessionCookie.getValue())
+                .cookie(SESSION_COOKIE_NAME, sessionCookie.getValue())
                 .exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
                         return response.bodyToMono(Map.class);

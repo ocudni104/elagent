@@ -25,6 +25,12 @@ spring:
               uri: lb://app-service
               predicates:
                 - Path=/hello
+            - id: app-service-api
+              uri: lb://app-service
+              predicates:
+                - Path=/api/app/**
+              filters:
+                - StripPrefix=2
             - id: idp
               uri: lb://identity-provider
               predicates:

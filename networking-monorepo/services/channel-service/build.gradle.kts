@@ -49,11 +49,17 @@ dependencies {
     implementation(platform(libs.spring.boot.bom))
     implementation(platform(libs.spring.cloud.bom))
     implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.jdbc)
+    runtimeOnly(libs.postgresql)
     implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.cloud.starter.consul.discovery)
 
     testImplementation(libs.spring.boot.starter.test)
     developmentOnly(libs.spring.boot.devtools)
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)

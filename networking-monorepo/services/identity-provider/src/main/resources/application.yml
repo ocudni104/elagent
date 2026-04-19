@@ -16,6 +16,12 @@ spring:
 
 app:
   gateway-url: ${GATEWAY_BASE_URL:http://localhost:8080}
+  frontend-url: ${FRONTEND_BASE_URL:http://localhost:4321}
+
+auth:
+  session:
+    cookie-name: sid
+    absolute-ttl: 8h
 
 logging:
   level:

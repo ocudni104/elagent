@@ -1,0 +1,20 @@
+{
+  "name": "networking-monorepo-local",
+  "interface": {
+    "displayName": "Networking Monorepo Local"
+  },
+  "plugins": [
+    {
+      "name": "caveman",
+      "source": {
+        "source": "local",
+        "path": "./plugins/caveman"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

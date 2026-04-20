@@ -25,7 +25,8 @@ services:
     container_name: frontend
     profiles: [ "frontend", "dev" ]
     env_file:
-      - .env
+      - path: .env
+        required: false
     build:
       context: ../..
       dockerfile: docker/dev/frontend.dev.Dockerfile
@@ -61,6 +62,7 @@ services:
     environment:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
+      GRADLE_USER_HOME: /tmp/gradle-home
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       GATEWAY_BASE_URL: http://localhost:8086
@@ -78,6 +80,7 @@ services:
     environment:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
+      GRADLE_USER_HOME: /tmp/gradle-home
       IDP_ISSUER_URI: http://identity-provider:8081
     command: sh -c "cd services/app-service && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRunInContainer"
 
@@ -118,6 +121,7 @@ services:
     environment:
       CONSUL_HOST: consul
       CONSUL_PORT: 8500
+      GRADLE_USER_HOME: /tmp/gradle-home
       IDP_ISSUER_URI: http://identity-provider:8081
     command: sh -c "cd services/gateway && ./gradlew --project-cache-dir /tmp/gradle-project-cache bootRunInContainer"
 

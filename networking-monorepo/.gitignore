@@ -49,6 +49,12 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+# Terraform / OpenTofu generated state
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+plugins/caveman/
+
 ################################
 # Node / pnpm (ANYWHERE)
 ################################

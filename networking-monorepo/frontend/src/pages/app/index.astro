@@ -34,7 +34,10 @@ const factItems = me
   ? [
       { label: "Email", value: me.email ?? "N/A" },
       { label: "Session", value: me.sessionId ?? "N/A" },
-      { label: "Tenant", value: me.tenantId ?? "N/A" }
+      { label: "Tenant", value: me.tenantId ?? "N/A" },
+      { label: "Device", value: me.deviceId ?? "N/A" },
+      { label: "OS", value: me.deviceOs ?? "N/A" },
+      { label: "Screen", value: me.deviceScreen ?? "N/A" }
     ]
   : [];
 ---
@@ -75,6 +78,12 @@ const factItems = me
         <dd>{me.email ?? "N/A"}</dd>
         <dt>Tenant ID</dt>
         <dd>{me.tenantId ?? "N/A"}</dd>
+        <dt>Device ID</dt>
+        <dd>{me.deviceId ?? "N/A"}</dd>
+        <dt>Device OS</dt>
+        <dd>{me.deviceOs ?? "N/A"}</dd>
+        <dt>Device Screen</dt>
+        <dd>{me.deviceScreen ?? "N/A"}</dd>
         <dt>Roles</dt>
         <dd>{me.roles?.length ? me.roles.join(", ") : "N/A"}</dd>
         <dt>Scopes</dt>

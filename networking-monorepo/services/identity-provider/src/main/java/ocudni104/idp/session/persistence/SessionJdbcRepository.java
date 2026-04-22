@@ -1,7 +1,7 @@
 package ocudni104.idp.session.persistence;
 
 import lombok.RequiredArgsConstructor;
-import ocudni104.idp.session.domain.DeviceId;
+import ocudni104.idp.device.domain.DeviceId;
 import ocudni104.idp.session.domain.Session;
 import ocudni104.idp.session.domain.SessionRepository;
 import ocudni104.idp.session.domain.SessionId;
@@ -52,7 +52,7 @@ public class SessionJdbcRepository implements SessionRepository {
                     tenant_id,
                     device_id,
                     created_at,
-                    absolute_expires_at,
+                    absolutexpiresAte_expires_at,
                     revoked_at
                 ) values (
                     :id,

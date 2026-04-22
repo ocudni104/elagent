@@ -1,5 +1,6 @@
 package ocudni104.idp.config;
 
+import ocudni104.idp.device.application.UpsertDeviceUseCase;
 import ocudni104.idp.federation.FederatedIdentityAuthenticationSuccessHandler;
 import ocudni104.idp.session.application.CreateSessionUseCase;
 import ocudni104.idp.user.application.FindOrCreateUserFromFederatedLoginUseCase;
@@ -32,6 +33,7 @@ public class SecurityConfig {
             HttpSecurity http,
             AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository,
             FindOrCreateUserFromFederatedLoginUseCase findOrCreateUserFromFederatedLoginUseCase,
+            UpsertDeviceUseCase upsertDeviceUseCase,
             CreateSessionUseCase createSessionUseCase
     ) throws Exception {
         http
@@ -60,6 +62,7 @@ public class SecurityConfig {
                 .successHandler(new FederatedIdentityAuthenticationSuccessHandler(
                         frontendUrl,
                         findOrCreateUserFromFederatedLoginUseCase,
+                        upsertDeviceUseCase,
                         createSessionUseCase,
                         sessionCookieName
                 ))

@@ -1,4 +1,5 @@
 -- atlas:import "./schemas/users.sql"
+-- atlas:import "./schemas/devices.sql"
 -- atlas:import "./schemas/sessions.sql"
 -- atlas:import "./schemas/channels.sql"
 -- atlas:import "./schemas/videos.sql"

@@ -1,4 +1,4 @@
-package ocudni104.idp.session.domain;
+package ocudni104.idp.device.domain;
 
 import java.util.Objects;
 import java.util.UUID;

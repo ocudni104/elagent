@@ -27,7 +27,7 @@ export function getTransientCookieOptions(url) {
 
 export function getGoogleAuthorizationUrl(env) {
   const backendUrl =
-    env.INTERNAL_BACKEND_URL ?? env.PUBLIC_BACKEND_URL ?? "http://localhost:8080";
+    env.PUBLIC_BACKEND_URL ?? env.INTERNAL_BACKEND_URL ?? "http://localhost:8080";
 
   return `${backendUrl}/api/idp/oauth2/authorization/google`;
 }

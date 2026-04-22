@@ -5,12 +5,23 @@ import {
   sanitizeDeviceField
 } from "../../lib/auth.js";
 
+export const prerender = false;
+
 const redirectStatus = 303;
 
+function canReadFormData(request: Request) {
+  const contentType = request.headers.get("content-type") ?? "";
+
+  return (
+    contentType.includes("application/x-www-form-urlencoded") ||
+    contentType.includes("multipart/form-data")
+  );
+}
+
 export const POST: APIRoute = async ({ request, cookies, redirect, url }) => {
-  const formData = await request.formData();
-  const deviceOs = sanitizeDeviceField(formData.get("deviceOs"), 120);
-  const deviceScreen = sanitizeDeviceField(formData.get("deviceScreen"), 64);
+  const formData = canReadFormData(request) ? await request.formData() : null;
+  const deviceOs = sanitizeDeviceField(formData?.get("deviceOs") ?? null, 120);
+  const deviceScreen = sanitizeDeviceField(formData?.get("deviceScreen") ?? null, 64);
   const cookieOptions = getTransientCookieOptions(url);
 
   if (deviceOs) {

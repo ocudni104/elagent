@@ -1,5 +1,6 @@
 package ocudni104.idp.session.domain;
 
+import ocudni104.idp.device.domain.DeviceId;
 import org.junit.jupiter.api.Test;
 import ocudni104.idp.tenant.domain.TenantId;
 import ocudni104.idp.user.domain.UserId;

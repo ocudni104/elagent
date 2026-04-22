@@ -2,11 +2,11 @@ package ocudni104.idp.session.web;
 
 
 import lombok.RequiredArgsConstructor;
+import ocudni104.idp.device.domain.DeviceId;
 import ocudni104.idp.session.application.CreateSessionCommand;
 import ocudni104.idp.session.application.CreateSessionUseCase;
 import ocudni104.idp.session.application.RevokeSessionUseCase;
 import ocudni104.idp.session.application.ValidateSessionUseCase;
-import ocudni104.idp.session.domain.DeviceId;
 import ocudni104.idp.session.domain.Session;
 import ocudni104.idp.session.domain.SessionId;
 import ocudni104.idp.tenant.domain.TenantId;

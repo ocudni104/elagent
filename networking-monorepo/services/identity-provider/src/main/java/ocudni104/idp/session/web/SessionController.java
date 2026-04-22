@@ -62,11 +62,18 @@ public class SessionController {
     @GetMapping("/validate")
     public ResponseEntity<Map<String, String>> validate(HttpServletRequest request) {
         String rawSessionId = readSessionId(request);
-        if (rawSessionId == null) {
+        if (rawSessionId == null || rawSessionId.isBlank()) {
             return ResponseEntity.status(401).build();
         }
 
-        Session session = validateSessionUseCase.execute(new SessionId(UUID.fromString(rawSessionId)));
+        UUID sessionUuid;
+        try {
+            sessionUuid = UUID.fromString(rawSessionId);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(401).build();
+        }
+
+        Session session = validateSessionUseCase.execute(new SessionId(sessionUuid));
         var user = userRepository.findById(session.userId())
                 .orElseThrow(() -> new IllegalStateException("User not found for session " + session.id().value()));
         Instant now = Instant.now();

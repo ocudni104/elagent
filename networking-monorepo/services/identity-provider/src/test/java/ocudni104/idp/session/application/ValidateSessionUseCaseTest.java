@@ -1,6 +1,6 @@
 package ocudni104.idp.session.application;
 
-import ocudni104.idp.session.domain.DeviceId;
+import ocudni104.idp.device.domain.DeviceId;
 import ocudni104.idp.session.domain.Session;
 import ocudni104.idp.session.domain.SessionId;
 import ocudni104.idp.session.domain.SessionRepository;

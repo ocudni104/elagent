@@ -1,7 +1,7 @@
 package ocudni104.idp.session.persistence;
 
 import lombok.RequiredArgsConstructor;
-import ocudni104.idp.session.domain.DeviceId;
+import ocudni104.idp.device.domain.DeviceId;
 import ocudni104.idp.session.domain.Session;
 import ocudni104.idp.session.domain.SessionRepository;
 import ocudni104.idp.session.domain.SessionId;

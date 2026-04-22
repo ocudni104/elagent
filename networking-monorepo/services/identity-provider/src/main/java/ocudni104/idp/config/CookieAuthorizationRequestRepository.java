@@ -3,6 +3,7 @@ package ocudni104.idp.config;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.stereotype.Component;
@@ -38,16 +39,11 @@ public class CookieAuthorizationRequestRepository
             HttpServletResponse response
     ) {
         if (authorizationRequest == null) {
-            deleteCookie(response, COOKIE_NAME);
+            deleteCookie(request, response, COOKIE_NAME);
             return;
         }
 
-        Cookie cookie = new Cookie(COOKIE_NAME, serialize(authorizationRequest));
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        cookie.setPath("/");
-        cookie.setMaxAge(COOKIE_MAX_AGE_SECONDS);
-        response.addCookie(cookie);
+        response.addHeader("Set-Cookie", buildCookie(request, COOKIE_NAME, serialize(authorizationRequest), COOKIE_MAX_AGE_SECONDS));
     }
 
     @Override
@@ -56,7 +52,7 @@ public class CookieAuthorizationRequestRepository
             HttpServletResponse response
     ) {
         OAuth2AuthorizationRequest authorizationRequest = loadAuthorizationRequest(request);
-        deleteCookie(response, COOKIE_NAME);
+        deleteCookie(request, response, COOKIE_NAME);
         return authorizationRequest;
     }
 
@@ -74,13 +70,19 @@ public class CookieAuthorizationRequestRepository
         return null;
     }
 
-    private void deleteCookie(HttpServletResponse response, String name) {
-        Cookie cookie = new Cookie(name, "");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+    private void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+        response.addHeader("Set-Cookie", buildCookie(request, name, "", 0));
+    }
+
+    private String buildCookie(HttpServletRequest request, String name, String value, int maxAge) {
+        return ResponseCookie.from(name, value)
+                .httpOnly(true)
+                .secure(request.isSecure())
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(maxAge)
+                .build()
+                .toString();
     }
 
     private String serialize(OAuth2AuthorizationRequest authorizationRequest) {

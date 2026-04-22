@@ -72,7 +72,7 @@ public class SecurityConfig {
             .exceptionHandling(ex -> ex
                 .defaultAuthenticationEntryPointFor(
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
-                        request -> request.getServletPath().startsWith("/internal/")
+                        request -> request.getServletPath().startsWith("/sessions/")
                 )
             );
 

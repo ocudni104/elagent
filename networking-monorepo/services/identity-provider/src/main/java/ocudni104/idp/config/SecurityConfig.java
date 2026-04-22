@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/.well-known/openid-configuration",
                     "/oauth2/jwks",
-                    "/internal/token",
+                    "/sessions/validate",
                     "/me",
                     "/actuator/health",
                     "/error"

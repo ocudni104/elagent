@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * Runs before Spring Security (-100). When a browser request carries a sid cookie
- * but no Authorization header, this filter calls the IDP's /internal/token endpoint to
+ * but no Authorization header, this filter calls the IDP's /sessions/validate endpoint to
  * exchange the session for a short-lived JWT, then injects it as "Authorization: Bearer …"
  * so the downstream JWT resource-server validation works transparently.
  */
@@ -50,7 +50,7 @@ public class SessionToJwtFilter implements WebFilter {
         }
 
         return idpClient.get()
-                .uri("/internal/token")
+                .uri("/sessions/validate")
                 .cookie(SESSION_COOKIE_NAME, sessionCookie.getValue())
                 .exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {

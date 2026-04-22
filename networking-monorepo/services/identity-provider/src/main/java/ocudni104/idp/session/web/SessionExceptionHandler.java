@@ -4,6 +4,7 @@ package ocudni104.idp.session.web;
 import ocudni104.idp.session.domain.exception.SessionExpiredException;
 import ocudni104.idp.session.domain.exception.SessionNotFoundException;
 import ocudni104.idp.session.domain.exception.SessionRevokedException;
+import ocudni104.idp.user.domain.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,12 @@ public class SessionExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse handleRevoked(SessionRevokedException ex) {
         return new ErrorResponse("SESSION_REVOKED", ex.getMessage());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleUserNotFound(UserNotFoundException ex) {
+        return new ErrorResponse("USER_NOT_FOUND", ex.getMessage());
     }
 
     public record ErrorResponse(String code, String message) {}

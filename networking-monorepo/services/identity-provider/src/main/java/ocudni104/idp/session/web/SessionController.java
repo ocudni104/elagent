@@ -12,6 +12,7 @@ import ocudni104.idp.session.domain.SessionId;
 import ocudni104.idp.tenant.domain.TenantId;
 import ocudni104.idp.user.domain.UserRepository;
 import ocudni104.idp.user.domain.UserId;
+import ocudni104.idp.user.domain.exception.UserNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -75,7 +76,7 @@ public class SessionController {
 
         Session session = validateSessionUseCase.execute(new SessionId(sessionUuid));
         var user = userRepository.findById(session.userId())
-                .orElseThrow(() -> new IllegalStateException("User not found for session " + session.id().value()));
+                .orElseThrow(() -> new UserNotFoundException(session.userId()));
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer(issuerUri)

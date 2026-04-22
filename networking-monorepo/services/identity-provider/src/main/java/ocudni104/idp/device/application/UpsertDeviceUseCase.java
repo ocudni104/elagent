@@ -20,8 +20,8 @@ public class UpsertDeviceUseCase {
 
         Device device = deviceRepository.findById(command.id())
                 .map(existing -> existing.toBuilder()
-                        .os(command.os())
-                        .screen(command.screen())
+                        .os(command.os() != null ? command.os() : existing.getOs())
+                        .screen(command.screen() != null ? command.screen() : existing.getScreen())
                         .updatedAt(now)
                         .build())
                 .orElseGet(() -> Device.builder()

@@ -52,7 +52,7 @@ public class SessionJdbcRepository implements SessionRepository {
                     tenant_id,
                     device_id,
                     created_at,
-                    absolutexpiresAte_expires_at,
+                    absolute_expires_at,
                     revoked_at
                 ) values (
                     :id,

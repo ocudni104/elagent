@@ -5,6 +5,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import ocudni104.idp.config.CookieAuthorizationRequestRepository;
+import ocudni104.idp.config.DeviceAwareOAuth2AuthorizationRequestResolver;
 import ocudni104.idp.device.application.UpsertDeviceCommand;
 import ocudni104.idp.device.application.UpsertDeviceUseCase;
 import ocudni104.idp.device.domain.DeviceId;
@@ -20,6 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
@@ -31,8 +34,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FederatedIdentityAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     private static final String DEVICE_ID_COOKIE_NAME = "did";
-    private static final String DEVICE_OS_COOKIE_NAME = "device_os";
-    private static final String DEVICE_SCREEN_COOKIE_NAME = "device_screen";
 
     private final AuthenticationSuccessHandler delegate;
     private final FindOrCreateUserFromFederatedLoginUseCase findOrCreateUserFromFederatedLoginUseCase;
@@ -86,8 +87,16 @@ public class FederatedIdentityAuthenticationSuccessHandler implements Authentica
             SecurityContextHolder.getContext().setAuthentication(localAuth);
 
             DeviceId deviceId = extractDeviceId(request);
-            String deviceOs = readCookieValue(request, DEVICE_OS_COOKIE_NAME);
-            String deviceScreen = readCookieValue(request, DEVICE_SCREEN_COOKIE_NAME);
+            OAuth2AuthorizationRequest authorizationRequest =
+                    CookieAuthorizationRequestRepository.getCurrentAuthorizationRequest(request);
+            String deviceOs = readAuthorizationRequestAttribute(
+                    authorizationRequest,
+                    DeviceAwareOAuth2AuthorizationRequestResolver.DEVICE_OS_ATTRIBUTE_NAME
+            );
+            String deviceScreen = readAuthorizationRequestAttribute(
+                    authorizationRequest,
+                    DeviceAwareOAuth2AuthorizationRequestResolver.DEVICE_SCREEN_ATTRIBUTE_NAME
+            );
 
             if (deviceId != null) {
                 upsertDeviceUseCase.execute(new UpsertDeviceCommand(deviceId, deviceOs, deviceScreen));
@@ -113,8 +122,6 @@ public class FederatedIdentityAuthenticationSuccessHandler implements Authentica
                     .maxAge(session.absoluteExpiresAt().getEpochSecond() - session.createdAt().getEpochSecond())
                     .build();
             response.addHeader("Set-Cookie", sidCookie.toString());
-            clearTransientCookie(request, response, DEVICE_OS_COOKIE_NAME);
-            clearTransientCookie(request, response, DEVICE_SCREEN_COOKIE_NAME);
         }
 
         delegate.onAuthenticationSuccess(request, response, SecurityContextHolder.getContext().getAuthentication());
@@ -147,14 +154,16 @@ public class FederatedIdentityAuthenticationSuccessHandler implements Authentica
         return null;
     }
 
-    private static void clearTransientCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-        response.addHeader("Set-Cookie", ResponseCookie.from(name, "")
-                .httpOnly(true)
-                .secure(request.isSecure())
-                .sameSite("Lax")
-                .path("/")
-                .maxAge(0)
-                .build()
-                .toString());
+    private static String readAuthorizationRequestAttribute(OAuth2AuthorizationRequest request, String name) {
+        if (request == null) {
+            return null;
+        }
+
+        Object value = request.getAttribute(name);
+        if (value instanceof String stringValue && !stringValue.isBlank()) {
+            return stringValue;
+        }
+
+        return null;
     }
 }

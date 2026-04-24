@@ -1,6 +1,8 @@
 package ocudni104.idp.federation;
 
 import jakarta.servlet.http.Cookie;
+import ocudni104.idp.config.CookieAuthorizationRequestRepository;
+import ocudni104.idp.config.DeviceAwareOAuth2AuthorizationRequestResolver;
 import ocudni104.idp.device.application.UpsertDeviceCommand;
 import ocudni104.idp.device.application.UpsertDeviceUseCase;
 import ocudni104.idp.device.domain.DeviceId;
@@ -22,6 +24,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
 import java.time.Instant;
@@ -72,10 +75,20 @@ class FederatedIdentityAuthenticationSuccessHandlerTest {
                 .thenReturn(session());
 
         MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setCookies(
-                new Cookie("did", deviceId.toString()),
-                new Cookie("device_os", "macOS"),
-                new Cookie("device_screen", "1512x982@2")
+        request.setCookies(new Cookie("did", deviceId.toString()));
+        request.setAttribute(
+                CookieAuthorizationRequestRepository.REQUEST_ATTRIBUTE_NAME,
+                OAuth2AuthorizationRequest.authorizationCode()
+                        .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
+                        .clientId("google-client")
+                        .redirectUri("http://localhost:8080/login/oauth2/code/google")
+                        .state("oauth-state")
+                        .authorizationRequestUri("https://accounts.google.com/o/oauth2/v2/auth?state=oauth-state")
+                        .attributes(attributes -> {
+                            attributes.put(DeviceAwareOAuth2AuthorizationRequestResolver.DEVICE_OS_ATTRIBUTE_NAME, "macOS");
+                            attributes.put(DeviceAwareOAuth2AuthorizationRequestResolver.DEVICE_SCREEN_ATTRIBUTE_NAME, "1512x982@2");
+                        })
+                        .build()
         );
         MockHttpServletResponse response = new MockHttpServletResponse();
 

@@ -2,6 +2,7 @@ package ocudni104.idp.device.domain;
 
 import lombok.Builder;
 import lombok.Value;
+import lombok.With;
 import lombok.experimental.Accessors;
 
 import java.time.Instant;

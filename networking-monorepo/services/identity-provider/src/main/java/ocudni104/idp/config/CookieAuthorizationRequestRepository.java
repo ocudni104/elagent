@@ -21,6 +21,8 @@ public class CookieAuthorizationRequestRepository
 
     private static final String COOKIE_NAME = "oauth2_auth_request";
     private static final int COOKIE_MAX_AGE_SECONDS = 180;
+    public static final String REQUEST_ATTRIBUTE_NAME =
+            CookieAuthorizationRequestRepository.class.getName() + ".authorizationRequest";
 
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
@@ -52,8 +54,18 @@ public class CookieAuthorizationRequestRepository
             HttpServletResponse response
     ) {
         OAuth2AuthorizationRequest authorizationRequest = loadAuthorizationRequest(request);
+        request.setAttribute(REQUEST_ATTRIBUTE_NAME, authorizationRequest);
         deleteCookie(request, response, COOKIE_NAME);
         return authorizationRequest;
+    }
+
+    public static OAuth2AuthorizationRequest getCurrentAuthorizationRequest(HttpServletRequest request) {
+        Object value = request.getAttribute(REQUEST_ATTRIBUTE_NAME);
+        if (value instanceof OAuth2AuthorizationRequest authorizationRequest) {
+            return authorizationRequest;
+        }
+
+        return null;
     }
 
     private Cookie findCookie(HttpServletRequest request, String name) {

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -32,6 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(
             HttpSecurity http,
             AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository,
+            OAuth2AuthorizationRequestResolver authorizationRequestResolver,
             FindOrCreateUserFromFederatedLoginUseCase findOrCreateUserFromFederatedLoginUseCase,
             UpsertDeviceUseCase upsertDeviceUseCase,
             CreateSessionUseCase createSessionUseCase
@@ -57,6 +59,7 @@ public class SecurityConfig {
             )
             .oauth2Login(oauth2 -> oauth2
                 .authorizationEndpoint(endpoint -> endpoint
+                    .authorizationRequestResolver(authorizationRequestResolver)
                     .authorizationRequestRepository(authorizationRequestRepository)
                 )
                 .successHandler(new FederatedIdentityAuthenticationSuccessHandler(

@@ -1,9 +1,5 @@
 import type { APIRoute } from "astro";
-import {
-  getGoogleAuthorizationUrl,
-  getTransientCookieOptions,
-  sanitizeDeviceField
-} from "../../lib/auth.js";
+import { getGoogleAuthorizationUrl, sanitizeDeviceField } from "../../lib/auth.js";
 
 export const prerender = false;
 
@@ -18,21 +14,15 @@ function canReadFormData(request: Request) {
   );
 }
 
-export const POST: APIRoute = async ({ request, cookies, redirect, url }) => {
+export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = canReadFormData(request) ? await request.formData() : null;
   const deviceOs = sanitizeDeviceField(formData?.get("deviceOs") ?? null, 120);
   const deviceScreen = sanitizeDeviceField(formData?.get("deviceScreen") ?? null, 64);
-  const cookieOptions = getTransientCookieOptions(url);
 
-  if (deviceOs) {
-    cookies.set("device_os", deviceOs, cookieOptions);
-  }
-
-  if (deviceScreen) {
-    cookies.set("device_screen", deviceScreen, cookieOptions);
-  }
-
-  return redirect(getGoogleAuthorizationUrl(import.meta.env), redirectStatus);
+  return redirect(
+    getGoogleAuthorizationUrl(import.meta.env, { deviceOs, deviceScreen }),
+    redirectStatus
+  );
 };
 
 export const GET: APIRoute = ({ redirect }) => {

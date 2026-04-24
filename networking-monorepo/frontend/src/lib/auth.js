@@ -1,7 +1,5 @@
 export const googleAuthActionPath = "/auth/google";
 
-const transientCookieMaxAgeSeconds = 60 * 10;
-
 export function sanitizeDeviceField(value, maxLength) {
   if (typeof value !== "string") {
     return null;
@@ -15,19 +13,18 @@ export function sanitizeDeviceField(value, maxLength) {
   return normalized.slice(0, maxLength);
 }
 
-export function getTransientCookieOptions(url) {
-  return {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: url.protocol === "https:",
-    path: "/",
-    maxAge: transientCookieMaxAgeSeconds
-  };
-}
-
-export function getGoogleAuthorizationUrl(env) {
+export function getGoogleAuthorizationUrl(env, device = {}) {
   const backendUrl =
     env.PUBLIC_BACKEND_URL ?? env.INTERNAL_BACKEND_URL ?? "http://localhost:8080";
+  const url = new URL("/api/idp/oauth2/authorization/google", backendUrl);
 
-  return `${backendUrl}/api/idp/oauth2/authorization/google`;
+  if (device.deviceOs) {
+    url.searchParams.set("deviceOs", device.deviceOs);
+  }
+
+  if (device.deviceScreen) {
+    url.searchParams.set("deviceScreen", device.deviceScreen);
+  }
+
+  return url.toString();
 }

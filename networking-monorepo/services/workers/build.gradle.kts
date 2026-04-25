@@ -2,6 +2,7 @@
 plugins {
     id("java")
     alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spotless)
 }
 
 group = "ocudni104"
@@ -17,6 +18,27 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+spotless {
+    java {
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    kotlinGradle {
+        ktlint()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    format("misc") {
+        target("*.md", "*.yml", "*.yaml", ".gitignore")
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
 dependencies {
     // Spring boot
     implementation(platform(libs.spring.boot.bom))
@@ -30,7 +52,6 @@ dependencies {
     annotationProcessor(libs.lombok)
     testCompileOnly(libs.lombok)
     testAnnotationProcessor(libs.lombok)
-
 
     // import JUnit BOM
     testImplementation(platform(libs.junit.bom))

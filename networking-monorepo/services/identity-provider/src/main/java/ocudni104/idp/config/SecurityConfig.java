@@ -22,66 +22,65 @@ import org.springframework.security.web.savedrequest.NullRequestCache;
 @Configuration
 public class SecurityConfig {
 
-    @Value("${app.frontend-url:http://localhost:4321}")
-    private String frontendUrl;
+  @Value("${app.frontend-url:http://localhost:4321}")
+  private String frontendUrl;
 
-    @Value("${auth.session.cookie-name:sid}")
-    private String sessionCookieName;
+  @Value("${auth.session.cookie-name:sid}")
+  private String sessionCookieName;
 
-    @Bean
-    @Order(2)
-    public SecurityFilterChain defaultSecurityFilterChain(
-            HttpSecurity http,
-            AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository,
-            OAuth2AuthorizationRequestResolver authorizationRequestResolver,
-            FindOrCreateUserFromFederatedLoginUseCase findOrCreateUserFromFederatedLoginUseCase,
-            UpsertDeviceUseCase upsertDeviceUseCase,
-            CreateSessionUseCase createSessionUseCase
-    ) throws Exception {
-        http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/.well-known/openid-configuration",
-                    "/oauth2/jwks",
-                    "/sessions/validate",
-                    "/me",
-                    "/actuator/health",
-                    "/error"
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .securityContext(securityContext -> securityContext
-                .securityContextRepository(new NullSecurityContextRepository())
-                .requireExplicitSave(false)
-            )
-            .oauth2Login(oauth2 -> oauth2
-                .authorizationEndpoint(endpoint -> endpoint
-                    .authorizationRequestResolver(authorizationRequestResolver)
-                    .authorizationRequestRepository(authorizationRequestRepository)
-                )
-                .successHandler(new FederatedIdentityAuthenticationSuccessHandler(
-                        frontendUrl,
-                        findOrCreateUserFromFederatedLoginUseCase,
-                        upsertDeviceUseCase,
-                        createSessionUseCase,
-                        sessionCookieName
-                ))
-            )
-            // Internal API endpoints called by the gateway must return 401, not a login redirect,
-            // and must never be saved as a post-login destination.
-            .requestCache(cache -> cache
-                .requestCache(new NullRequestCache())
-            )
-            .exceptionHandling(ex -> ex
-                .defaultAuthenticationEntryPointFor(
-                        new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
-                        request -> request.getServletPath().startsWith("/sessions/")
-                )
-            );
+  @Bean
+  @Order(2)
+  public SecurityFilterChain defaultSecurityFilterChain(
+      HttpSecurity http,
+      AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository,
+      OAuth2AuthorizationRequestResolver authorizationRequestResolver,
+      FindOrCreateUserFromFederatedLoginUseCase findOrCreateUserFromFederatedLoginUseCase,
+      UpsertDeviceUseCase upsertDeviceUseCase,
+      CreateSessionUseCase createSessionUseCase)
+      throws Exception {
+    http.authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers(
+                        "/.well-known/openid-configuration",
+                        "/oauth2/jwks",
+                        "/sessions/validate",
+                        "/me",
+                        "/actuator/health",
+                        "/error")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .securityContext(
+            securityContext ->
+                securityContext
+                    .securityContextRepository(new NullSecurityContextRepository())
+                    .requireExplicitSave(false))
+        .oauth2Login(
+            oauth2 ->
+                oauth2
+                    .authorizationEndpoint(
+                        endpoint ->
+                            endpoint
+                                .authorizationRequestResolver(authorizationRequestResolver)
+                                .authorizationRequestRepository(authorizationRequestRepository))
+                    .successHandler(
+                        new FederatedIdentityAuthenticationSuccessHandler(
+                            frontendUrl,
+                            findOrCreateUserFromFederatedLoginUseCase,
+                            upsertDeviceUseCase,
+                            createSessionUseCase,
+                            sessionCookieName)))
+        // Internal API endpoints called by the gateway must return 401, not a login redirect,
+        // and must never be saved as a post-login destination.
+        .requestCache(cache -> cache.requestCache(new NullRequestCache()))
+        .exceptionHandling(
+            ex ->
+                ex.defaultAuthenticationEntryPointFor(
+                    new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                    request -> request.getServletPath().startsWith("/sessions/")));
 
-        return http.build();
-    }
+    return http.build();
+  }
 }

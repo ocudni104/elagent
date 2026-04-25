@@ -4,7 +4,7 @@ plugins {
     id("java")
     id("maven-publish")
     alias(libs.plugins.spring.boot)
-
+    alias(libs.plugins.spotless)
 }
 
 group = "ocudni104"
@@ -26,7 +26,7 @@ tasks.named<BootRun>("bootRun") {
     mainClass.set(appMainClass)
     systemProperty(
         "spring.profiles.active",
-        System.getProperty("spring.profiles.active") ?: "local"
+        System.getProperty("spring.profiles.active") ?: "local",
     )
 }
 
@@ -37,12 +37,33 @@ tasks.register<BootRun>("bootRunInContainer") {
     mainClass.set(appMainClass)
     systemProperty(
         "spring.profiles.active",
-        System.getProperty("spring.profiles.active") ?: "container"
+        System.getProperty("spring.profiles.active") ?: "container",
     )
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    kotlinGradle {
+        ktlint()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+
+    format("misc") {
+        target("*.md", "*.yml", "*.yaml", ".gitignore")
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
 }
 
 dependencies {

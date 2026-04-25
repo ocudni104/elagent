@@ -63,6 +63,16 @@ Optional but useful:
 - Java 21 if you want to run services directly outside Docker
 - Node.js and pnpm if you want to run the frontend directly outside Docker
 
+## Install Pre-commit Hook
+
+Install the repo pre-commit hook to auto-run Spotless for staged Java service changes:
+
+```bash
+./scripts/install-spotless-pre-commit.sh
+```
+
+The hook only runs `spotlessApply` for staged service directories under `services/` and re-stages those formatting changes into the commit in progress.
+
 ## Run Everything
 
 From the repo root:

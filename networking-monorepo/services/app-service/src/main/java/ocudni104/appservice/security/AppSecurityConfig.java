@@ -10,18 +10,18 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class AppSecurityConfig {
 
-    @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        http
-            .csrf(ServerHttpSecurity.CsrfSpec::disable)
-            .authorizeExchange(exchanges -> exchanges
-                    .pathMatchers("/actuator/health").permitAll()
-                    .anyExchange().authenticated()
-            )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                    .jwt(jwt -> {})
-            );
+  @Bean
+  public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    http.csrf(ServerHttpSecurity.CsrfSpec::disable)
+        .authorizeExchange(
+            exchanges ->
+                exchanges
+                    .pathMatchers("/actuator/health")
+                    .permitAll()
+                    .anyExchange()
+                    .authenticated())
+        .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}));
 
-        return http.build();
-    }
+    return http.build();
+  }
 }
